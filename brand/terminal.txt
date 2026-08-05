@@ -1,0 +1,24 @@
+$ npm run scan
+
+Scanning 6 boards…
+  greenhouse/doordashusa: 468
+  greenhouse/instacart: 117
+  ashby/ramp: 120
+  lever/palantir: 301
+  workday/Stryker: 100
+  workday/R1 RCM: 54
+
+1156 scanned, 808 passed filters, 32 matched
+
+
+$ npm run evaluate
+
+Evaluating 6 roles…
+    [  1] ramp           Senior Recruiter | Design
+    [  1] ramp           Technical Recruiter | Engineering
+  + [  4] ramp           Senior Recruiter | Business / GTM
+  + [  4] R1 RCM         Talent Acquisition Specialist (Contract)
+    [  3] palantir       Talent Sourcer (Contractor)
+    [  1] doordashusa    Customer Success Manager, SMB
+
+{"FAIL":3,"PASS":2,"MARGINAL":1}
