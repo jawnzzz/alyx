@@ -1,0 +1,56 @@
+{
+  "_comment": "Copy to config/boards.json and edit. boards.json is gitignored because your target list is your own.",
+  "boards": {
+    "greenhouse": [
+      "doordashusa",
+      "instacart",
+      "figma"
+    ],
+    "ashby": [
+      "ramp",
+      "linear",
+      "openai"
+    ],
+    "lever": [
+      "palantir"
+    ],
+    "workday": [
+      {
+        "host": "stryker.wd1.myworkdayjobs.com",
+        "tenant": "stryker",
+        "site": "StrykerCareers",
+        "company": "Stryker"
+      }
+    ]
+  },
+  "filters": {
+    "usOnly": true,
+    "_includeTitle": "Matching promotes a role. NOT matching does not drop it, because job titles are endlessly creative.",
+    "includeTitle": [
+      "recruit",
+      "talent acquisition",
+      "\\bsourcer\\b",
+      "customer success",
+      "client success",
+      "account manager",
+      "people operations",
+      "talent operations"
+    ],
+    "_excludeTitle": "These DO drop a role. Keep the list short and certain.",
+    "excludeTitle": [
+      "\\b(vp|vice president|chief|head of|director|president)\\b",
+      "\\b(intern|internship)\\b",
+      "warehouse|kitchen|driver|courier",
+      "\\b(nurse|physician|clinical|therapist)\\b",
+      "software engineer|data engineer|devops"
+    ],
+    "_searchTerms": "Workday only: it must be searched, not crawled. One query per term.",
+    "searchTerms": [
+      "recruiter",
+      "talent acquisition",
+      "sourcer",
+      "customer success",
+      "account manager"
+    ]
+  }
+}

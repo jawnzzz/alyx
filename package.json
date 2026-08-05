@@ -1,0 +1,13 @@
+{
+  "name": "alyx",
+  "version": "0.1.0",
+  "description": "A local job search command center. Scans public ATS boards, scores roles against your profile with Claude, keeps everything on your machine.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "scan": "node src/scan.mjs",
+    "scan:new": "node src/scan.mjs --matched-only --since 7",
+    "evaluate": "node src/evaluate.mjs --matched-only"
+  },
+  "engines": { "node": ">=20" }
+}

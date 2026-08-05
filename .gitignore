@@ -1,0 +1,9 @@
+node_modules/
+
+# Your data. None of this belongs in a public repo.
+config/boards.json
+config/profile.md
+data/
+!data/.gitkeep
+*.log
+.DS_Store
