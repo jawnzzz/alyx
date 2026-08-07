@@ -22,6 +22,7 @@ import * as ashby from './providers/ashby.mjs';
 import * as lever from './providers/lever.mjs';
 import * as workday from './providers/workday.mjs';
 import { isUsable, dedupe, newerThan } from './filter.mjs';
+import { load as loadApplications, appliedCanonicals } from './store.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CONFIG = join(ROOT, 'config', 'boards.json');
@@ -100,7 +101,13 @@ for (const j of jobs) {
 
 // Only surface roles never seen before, so a repeat scan is quiet.
 const seen = new Set(readJson(SEEN, []));
-let fresh = kept.filter((j) => !seen.has(j.canonical));
+
+// A role you already applied to is not a new lead. Boards relist and repost
+// constantly, and without this the same posting resurfaces after you have acted
+// on it, which is how a pipeline stops being trustworthy enough to act on.
+const applied = appliedCanonicals(loadApplications());
+
+let fresh = kept.filter((j) => !seen.has(j.canonical) && !applied.has(j.canonical));
 
 // Title matches first. The filter deliberately lets unrecognised titles through,
 // so without this the handful of real hits drown in hundreds of maybes.

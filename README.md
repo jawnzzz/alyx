@@ -82,7 +82,29 @@ node src/evaluate.mjs                # score pending roles
 node src/evaluate.mjs --limit 10
 node src/evaluate.mjs --matched-only
 node src/evaluate.mjs --json
+
+node src/track.mjs add <url>         # record an application, details pulled from the pipeline
+node src/track.mjs list --stale 21   # applications with no movement in three weeks
+node src/track.mjs status <id> responded --note "recruiter replied"
+node src/track.mjs stats --lane career
 ```
+
+### Tracking
+
+`track.mjs add <url>` reads the role straight out of `pipeline.json`, so recording
+an application means pasting a link, not retyping a company and a title. Status
+changes append to a history rather than overwriting a field, because a funnel
+built from current state alone cannot tell a rejection that followed an
+interview from one that followed silence.
+
+`stats` reports two rates, deliberately. **Any reply** counts rejections, since a
+rejection still means a human opened your application. **Engaged** counts only
+what moved you forward. A search at 16% replies and 2% engagement has a
+different problem from one where nothing comes back at all, and a single blended
+number hides which one you have.
+
+Every application carries a `lane`. One hire in a lane you are not targeting will
+otherwise make a broken funnel look solved.
 
 ## Design decisions
 
@@ -109,6 +131,7 @@ Everything lives in `data/`, gitignored:
 | `pipeline.json` | roles found, ranked, pending evaluation |
 | `seen.json` | canonical URLs already surfaced, so repeat scans stay quiet |
 | `evaluations.json` | scored results |
+| `applications.json` | what you applied to, with status history |
 
 Your `config/boards.json` and `config/profile.md` are gitignored too. Nothing personal is tracked by git.
 
@@ -118,8 +141,9 @@ Honest state of things:
 
 - **Scanner**: working, four providers, verified against live boards.
 - **Evaluator**: working, Claude-backed, read-only.
+- **Tracker**: working. Records applications, append-only status history, funnel stats. Imports an existing career-ops tracker via `src/migrate.mjs`.
 - **Desktop app**: exists, but is not yet wired to this data layer. It currently reads a different tracker format. Porting it is the next piece of work.
-- **Tracker**: not built yet. ALYX finds and scores roles; it does not yet track what you applied to.
+- **Reply detection**: not built. Status changes are manual. Nothing reads your inbox, so the tracker is only as current as the last time you told it something.
 
 ## License
 
