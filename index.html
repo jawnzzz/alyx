@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ALYX — Your job search, on your machine.</title>
+<meta name="description" content="ALYX scans public ATS boards, scores roles with Claude, and keeps everything on your machine. No API keys, no accounts, no cloud.">
+<style>
+  :root{
+    --bg:#0b0d11; --card:#141821; --line:#232833;
+    --fg:#e6e9ef; --dim:#8891a0; --accent:#4c8dff; --green:#3fb950;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--fg);
+    font-family:var(--sans);font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+  section{padding:88px 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:0}
+  h2{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:700;margin:0 0 32px}
+
+  /* hero */
+  .hero{padding:120px 0 88px;text-align:center;border-bottom:1px solid var(--line)}
+  .wordmark{
+    font-weight:700;font-size:clamp(38px,9vw,64px);letter-spacing:.34em;
+    margin:0 0 40px;text-indent:.34em;
+  }
+  .headline{font-size:clamp(26px,5vw,40px);line-height:1.2;font-weight:700;margin:0 0 16px;letter-spacing:-.01em}
+  .sub{color:var(--dim);margin:0 auto 36px;max-width:34em}
+  .btn{
+    display:inline-block;padding:12px 22px;border:1px solid var(--line);
+    background:var(--card);color:var(--fg);text-decoration:none;font-size:15px;
+  }
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* terminal */
+  .term{
+    background:var(--card);border:1px solid var(--line);padding:24px;
+    font-family:var(--mono);font-size:13.5px;line-height:1.7;color:var(--fg);
+    overflow-x:auto;white-space:pre;
+  }
+  .term .dimline{color:var(--dim)}
+  .term .hit{color:var(--green)}
+
+  /* app replica */
+  .appframe{border:1px solid var(--line);background:#0e1116}
+  .appbar{
+    display:flex;align-items:center;gap:8px;padding:10px 14px;
+    border-bottom:1px solid var(--line);background:var(--card);
+  }
+  .dot{width:10px;height:10px;border-radius:50%;background:#2b313d}
+  .appbody{padding:20px;display:grid;gap:16px}
+  .nowcard{border:1px solid var(--line);background:var(--card);padding:20px}
+  .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+  .nowtitle{font-size:22px;font-weight:700;margin:0 0 6px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .stat{border:1px solid var(--line);background:var(--card);padding:16px}
+  .statnum{font-size:26px;font-weight:700;line-height:1.1}
+  .statlbl{font-size:12.5px;color:var(--dim)}
+  .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .col{border:1px solid var(--line);background:var(--card);padding:12px}
+  .colhead{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+  .role{border:1px solid var(--line);border-top:2px solid var(--accent);background:#0e1116;padding:9px 10px;margin-bottom:8px}
+  .role b{display:block;font-size:13px;font-weight:700}
+  .role span{display:block;font-size:11.5px;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .caption{color:var(--dim);font-size:14px;margin-top:14px}
+
+  /* features */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .feat{border:1px solid var(--line);background:var(--card);padding:22px}
+  .feat h3{margin:0 0 8px;font-size:16px}
+  .feat p{margin:0;color:var(--dim);font-size:14.5px}
+
+  /* flow */
+  .flow{display:flex;align-items:center;gap:0;flex-wrap:wrap}
+  .step{border:1px solid var(--line);background:var(--card);padding:14px 20px;font-size:14.5px;white-space:nowrap}
+  .conn{flex:1;height:1px;background:var(--line);min-width:20px}
+
+  footer{padding:44px 0;color:var(--dim);font-size:13.5px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .footmark{font-weight:700;letter-spacing:.34em;text-indent:.34em;color:var(--fg);font-size:14px}
+  a{color:var(--accent)}
+
+  @media (max-width:720px){
+    section{padding:64px 0}
+    .hero{padding:80px 0 64px}
+    .grid,.stats,.cols{grid-template-columns:1fr}
+    .conn{display:none}
+    .flow{flex-direction:column;align-items:stretch;gap:8px}
+    .step{white-space:normal;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="wordmark">ALYX</div>
+    <h1 class="headline">Your job search, on your machine.</h1>
+    <p class="sub">Scans public ATS boards. Scores roles with Claude. No API keys, no accounts, no cloud.</p>
+    <a class="btn" href="https://github.com/jawnzzz/alyx">See how it works</a>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>What it looks like</h2>
+<div class="term"><span class="dimline">$</span> npm run scan
+
+Scanning 6 boards…
+<span class="dimline">  greenhouse/doordashusa: 468
+  greenhouse/instacart: 117
+  ashby/ramp: 120
+  lever/palantir: 301
+  workday/Stryker: 100
+  workday/R1 RCM: 54</span>
+
+1156 scanned, 808 passed filters, 32 matched
+
+<span class="dimline">$</span> npm run evaluate
+
+<span class="hit">  + [4] ramp      Senior Recruiter | Business / GTM</span>
+<span class="hit">  + [4] R1 RCM    Talent Acquisition Specialist (Contract)</span>
+    [3] palantir  Talent Sourcer (Contractor)
+    [1] doordash  Customer Success Manager, SMB</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>The desktop app</h2>
+    <div class="appframe">
+      <div class="appbar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <div class="appbody">
+        <div class="nowcard">
+          <div class="kicker">Do this now</div>
+          <p class="nowtitle">Reply to Northwind</p>
+          <p style="margin:0;color:var(--dim);font-size:14.5px">Product Recruiter, Contractor (Remote). Company replied, awaiting your response.</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="statnum">40</div><div class="statlbl">new roles to review</div></div>
+          <div class="stat"><div class="statnum">12</div><div class="statlbl">awaiting a reply</div></div>
+          <div class="stat"><div class="statnum">24</div><div class="statlbl">silent 30+ days</div></div>
+        </div>
+        <div class="cols">
+          <div class="col">
+            <div class="colhead"><span>Evaluated</span><span>5</span></div>
+            <div class="role"><b>Initech</b><span>Customer Success Lead</span></div>
+            <div class="role"><b>Umbrella</b><span>Talent Acquisition Partner</span></div>
+          </div>
+          <div class="col">
+            <div class="colhead"><span>Applied</span><span>41</span></div>
+            <div class="role"><b>Globex</b><span>Operations Associate</span></div>
+            <div class="role"><b>Soylent</b><span>Customer Education Specialist</span></div>
+          </div>
+          <div class="col">
+            <div class="colhead"><span>Responded</span><span>1</span></div>
+            <div class="role"><b>Northwind</b><span>Product Recruiter</span></div>
+          </div>
+          <div class="col">
+            <div class="colhead"><span>Closed</span><span>9</span></div>
+            <div class="role"><b>Hooli</b><span>Retention Specialist</span></div>
+            <div class="role"><b>Vandelay</b><span>Sourcing Recruiter</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="caption">What needs your attention, your pipeline, and Claude, in one window. Shown with sample data.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Why it is built this way</h2>
+    <div class="grid">
+      <div class="feat">
+        <h3>Four job boards, no auth</h3>
+        <p>Greenhouse, Ashby, Lever and Workday, straight from their public endpoints.</p>
+      </div>
+      <div class="feat">
+        <h3>Filters before it spends</h3>
+        <p>Deterministic rules throw out what obviously does not fit before any model is involved.</p>
+      </div>
+      <div class="feat">
+        <h3>Claude scores what survives</h3>
+        <p>Every role gets PASS, MARGINAL or FAIL with a one-sentence reason.</p>
+      </div>
+      <div class="feat">
+        <h3>Your data never leaves</h3>
+        <p>No accounts, no server, no telemetry. Your profile and pipeline stay in local files.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How it works</h2>
+    <div class="flow">
+      <div class="step">Configure boards</div><div class="conn"></div>
+      <div class="step">Scan</div><div class="conn"></div>
+      <div class="step">Filter</div><div class="conn"></div>
+      <div class="step">Evaluate</div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <footer>
+    <span class="footmark">ALYX</span>
+    <span>MIT licensed · <a href="https://github.com/jawnzzz/alyx">GitHub</a></span>
+  </footer>
+</div>
+
+</body>
+</html>
