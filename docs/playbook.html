@@ -1,0 +1,427 @@
+<title>ALYX Product Playbook</title>
+<style>
+  :root{
+    --bg:#eef0f4; --surface:#ffffff; --surface-2:#f7f8fb;
+    --line:#d5d9e3; --line-soft:#e4e7ee;
+    --ink:#12151b; --ink-2:#3b4250; --muted:#666e80;
+    --accent:#2559c9; --accent-soft:#e6ecfb;
+    --signal:#b23c12; --signal-soft:#fbe9e1;
+    --good:#1f6b45; --good-soft:#e2f1e9;
+    --display:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --body:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#0b0d11; --surface:#141821; --surface-2:#10141c;
+      --line:#262c39; --line-soft:#1d222c;
+      --ink:#e6e9ef; --ink-2:#c2c8d4; --muted:#8891a0;
+      --accent:#4c8dff; --accent-soft:#16243d;
+      --signal:#ff8351; --signal-soft:#2d1a12;
+      --good:#4fbe86; --good-soft:#12241b;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0b0d11; --surface:#141821; --surface-2:#10141c;
+    --line:#262c39; --line-soft:#1d222c;
+    --ink:#e6e9ef; --ink-2:#c2c8d4; --muted:#8891a0;
+    --accent:#4c8dff; --accent-soft:#16243d;
+    --signal:#ff8351; --signal-soft:#2d1a12;
+    --good:#4fbe86; --good-soft:#12241b;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--body); font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:820px; margin:0 auto; padding:0 24px 96px}
+  section{padding:44px 0; border-top:1px solid var(--line-soft)}
+  section:first-of-type{border-top:0}
+
+  h1,h2,h3,.eyebrow,.mark,th,.pill,.btnish{font-family:var(--display)}
+  .eyebrow{
+    font-size:11px; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 14px;
+  }
+  h1{
+    font-size:clamp(30px,6vw,46px); font-weight:700; letter-spacing:-.015em;
+    line-height:1.08; margin:0 0 18px; text-wrap:balance;
+  }
+  h2{
+    font-size:clamp(21px,3.4vw,27px); font-weight:700; letter-spacing:-.01em;
+    margin:0 0 8px; text-wrap:balance;
+  }
+  h3{font-size:16px; font-weight:700; letter-spacing:.01em; margin:0 0 6px}
+  p{margin:0 0 16px; max-width:66ch}
+  .lede{font-size:19px; color:var(--ink-2); max-width:62ch}
+  .sub{color:var(--muted); margin:-2px 0 26px; max-width:64ch; font-size:15.5px}
+  strong{font-weight:700; color:var(--ink)}
+  code{
+    font-family:var(--mono); font-size:.86em; background:var(--surface-2);
+    border:1px solid var(--line-soft); border-radius:3px; padding:1px 5px;
+  }
+  a{color:var(--accent)}
+
+  /* masthead */
+  header.top{padding:64px 0 40px}
+  .wordmark{
+    font-family:var(--display); font-weight:700; font-size:15px;
+    letter-spacing:.34em; text-indent:.34em; color:var(--muted); margin-bottom:26px;
+  }
+
+  /* status board */
+  .board{display:grid; gap:12px}
+  .row{
+    display:grid; grid-template-columns:120px 1fr; gap:18px; align-items:start;
+    background:var(--surface); border:1px solid var(--line);
+    border-left:3px solid var(--line); padding:15px 18px;
+  }
+  .row.works{border-left-color:var(--good)}
+  .row.broken{border-left-color:var(--signal)}
+  .row.none{border-left-color:var(--line)}
+  .mark{
+    font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    padding-top:3px;
+  }
+  .row.works .mark{color:var(--good)}
+  .row.broken .mark{color:var(--signal)}
+  .row.none .mark{color:var(--muted)}
+  .row p{margin:0; font-size:15.5px; color:var(--ink-2); max-width:none}
+  .row p b{color:var(--ink)}
+
+  /* numbered sequence */
+  ol.steps{list-style:none; margin:0; padding:0; counter-reset:s; display:grid; gap:20px}
+  ol.steps li{counter-increment:s; display:grid; grid-template-columns:34px 1fr; gap:16px}
+  ol.steps li::before{
+    content:counter(s); font-family:var(--display); font-weight:700; font-size:13px;
+    color:var(--accent); background:var(--accent-soft); border-radius:50%;
+    width:30px; height:30px; display:grid; place-items:center; margin-top:2px;
+  }
+  ol.steps p{margin:4px 0 0; font-size:15.5px; color:var(--ink-2)}
+
+  /* table */
+  .scroll{overflow-x:auto; border:1px solid var(--line); background:var(--surface)}
+  table{border-collapse:collapse; width:100%; min-width:560px; font-family:var(--display); font-size:14px}
+  th{
+    text-align:left; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted); font-weight:700; padding:12px 14px; border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  td{padding:12px 14px; border-bottom:1px solid var(--line-soft); color:var(--ink-2); vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  td.name{color:var(--ink); font-weight:700}
+  td.num{font-variant-numeric:tabular-nums; text-align:center; white-space:nowrap}
+  .pill{
+    display:inline-block; font-size:10px; font-weight:700; letter-spacing:.12em;
+    text-transform:uppercase; padding:3px 8px; border-radius:2px; white-space:nowrap;
+  }
+  .p-now{background:var(--signal-soft); color:var(--signal)}
+  .p-next{background:var(--accent-soft); color:var(--accent)}
+  .p-later{background:var(--surface-2); color:var(--muted); border:1px solid var(--line)}
+  .p-cut{background:transparent; color:var(--muted); border:1px dashed var(--line)}
+
+  /* lane cards */
+  .lanes{display:grid; gap:14px}
+  .lane{background:var(--surface); border:1px solid var(--line); padding:20px 22px}
+  .lane .head{display:flex; align-items:baseline; gap:12px; margin-bottom:4px; flex-wrap:wrap}
+  .lane h3{margin:0}
+  .lane .why{
+    font-size:13px; color:var(--muted); font-family:var(--display);
+    letter-spacing:.02em;
+  }
+  .lane ul{margin:12px 0 0; padding-left:18px; display:grid; gap:7px}
+  .lane li{font-size:15.5px; color:var(--ink-2)}
+  .lane li b{color:var(--ink)}
+
+  /* callout */
+  .note{
+    background:var(--surface); border:1px solid var(--line);
+    border-left:3px solid var(--accent); padding:18px 22px; margin:22px 0 0;
+  }
+  .note p{margin:0; font-size:15.5px; color:var(--ink-2)}
+  .note p+p{margin-top:12px}
+
+  /* glossary */
+  dl{margin:0; display:grid; gap:16px}
+  dt{font-family:var(--display); font-weight:700; font-size:15px; margin-bottom:2px}
+  dd{margin:0; font-size:15.5px; color:var(--ink-2); max-width:64ch}
+
+  footer{padding:40px 0 0; border-top:1px solid var(--line-soft); color:var(--muted); font-size:14px}
+
+  @media (max-width:640px){
+    body{font-size:16px}
+    .row{grid-template-columns:1fr; gap:6px}
+    .mark{padding-top:0}
+    section{padding:36px 0}
+  }
+</style>
+
+<div class="page">
+
+<header class="top">
+  <div class="wordmark">ALYX</div>
+  <h1>How to run this like a product manager</h1>
+  <p class="lede">You are building a real tool with real users, starting with you. This is the thinking that keeps it from becoming a pile of half-finished features, written for someone who has never done it before.</p>
+</header>
+
+<section>
+  <p class="eyebrow">Where things actually stand</p>
+  <h2>The honest status board</h2>
+  <p class="sub">A PM starts every cycle here. Not what you meant to build, what is true today.</p>
+
+  <div class="board">
+    <div class="row works">
+      <div class="mark">Works</div>
+      <p><b>Scanner.</b> Four job boards, no API keys, verified against live data. 1,156 roles scanned in one run.</p>
+    </div>
+    <div class="row works">
+      <div class="mark">Works</div>
+      <p><b>Evaluator.</b> Claude scores what survives the filter and gives a reason. Read-only, it can never write to your files.</p>
+    </div>
+    <div class="row works">
+      <div class="mark">Works</div>
+      <p><b>Tracker.</b> 51 applications imported, status history that cannot be overwritten, funnel stats that separate lanes.</p>
+    </div>
+    <div class="row works">
+      <div class="mark">Works</div>
+      <p><b>Landing page.</b> Built, self-contained, no third-party scripts. Not deployed yet, and its only button is a dead link.</p>
+    </div>
+    <div class="row broken">
+      <div class="mark">Broken</div>
+      <p><b>Measurement.</b> Roughly 13 August applications and six real interview processes never made it in. FXC Intelligence, Lime, MeritFirst, Goodwin, CoStar and Equinox all had live conversations the system does not know happened.</p>
+    </div>
+    <div class="row none">
+      <div class="mark">Not built</div>
+      <p><b>Everything else.</b> No inbox reading, no application assist, no desktop app wired to this data.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <p><b>This is the single most useful PM habit.</b> The status board is not a progress report, it is a decision tool. The moment "measurement is broken" is written down next to "scanner works," the next move stops being a matter of taste.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">The core move</p>
+  <h2>Build outcomes, not features</h2>
+  <p>The most common mistake is describing work as the thing you will build. A product manager describes it as the change for the person using it. Same work, completely different decisions fall out.</p>
+  <p>"Add a Gmail integration" is a feature. <strong>"I never lose track of an application again"</strong> is an outcome. The second one tells you when you are done, tells you what to cut, and tells you that a plain text file listing every reply would count as a win if it produced that result.</p>
+  <p>For ALYX right now the outcome is not "more applications." It is <strong>more live conversations with employers, and knowing which ones are live.</strong> Every feature below either serves that or gets cut.</p>
+</section>
+
+<section>
+  <p class="eyebrow">The reusable part</p>
+  <h2>Five questions, in this order</h2>
+  <p class="sub">Run these on any feature anyone proposes, including yourself at 1am. The order matters, because a yes to a later question cannot rescue a no to an earlier one.</p>
+
+  <ol class="steps">
+    <li>
+      <div>
+        <h3>What breaks if I do nothing?</h3>
+        <p>If the honest answer is "nothing," it is not the next thing. Applications silently vanishing is a real break. A prettier dashboard is not.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <h3>Who is this for, and how do I know they want it?</h3>
+        <p>Right now the user is you, which makes this easy and dangerous. Easy because you can ask. Dangerous because "I would think this is cool" is not evidence.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <h3>What has to be true for this to work?</h3>
+        <p>The riskiest assumption, not the hardest code. Auto-applying assumes unreviewed answers are accurate enough to send under your name. That assumption is the whole feature, and it is the part most likely to be wrong.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <h3>What does this unblock?</h3>
+        <p>Some work is worth doing mostly because it makes three other things possible. Reading your inbox is that. Assisted apply needs to know what you already sent.</p>
+      </div>
+    </li>
+    <li>
+      <div>
+        <h3>What is the smallest version that proves it?</h3>
+        <p>Not the smallest version you would ship. The smallest one that tells you whether the idea holds. Usually a fraction of what you first imagined.</p>
+      </div>
+    </li>
+  </ol>
+</section>
+
+<section>
+  <p class="eyebrow">Deciding what is next</p>
+  <h2>Scoring, applied to your real backlog</h2>
+  <p class="sub">Impact is how much it moves live conversations. Effort is your time. Unblocks is how much else it makes possible. High impact plus low effort plus high unblocks wins, every time, without debate.</p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Impact</th><th>Effort</th><th>Unblocks</th><th>Call</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="name">Read Gmail, propose status updates</td>
+          <td class="num">High</td><td class="num">Med</td><td class="num">High</td>
+          <td><span class="pill p-now">Now</span></td>
+        </tr>
+        <tr>
+          <td class="name">Answer library for screening questions</td>
+          <td class="num">High</td><td class="num">Low</td><td class="num">Med</td>
+          <td><span class="pill p-now">Now</span></td>
+        </tr>
+        <tr>
+          <td class="name">Follow-up nudges on quiet applications</td>
+          <td class="num">Med</td><td class="num">Low</td><td class="num">Low</td>
+          <td><span class="pill p-next">Next</span></td>
+        </tr>
+        <tr>
+          <td class="name">Fill the form, stop before submit</td>
+          <td class="num">Med</td><td class="num">High</td><td class="num">Low</td>
+          <td><span class="pill p-next">Next</span></td>
+        </tr>
+        <tr>
+          <td class="name">Tailor the resume per role</td>
+          <td class="num">Med</td><td class="num">Med</td><td class="num">Low</td>
+          <td><span class="pill p-next">Next</span></td>
+        </tr>
+        <tr>
+          <td class="name">Wire the desktop app to this data</td>
+          <td class="num">Med</td><td class="num">High</td><td class="num">Low</td>
+          <td><span class="pill p-later">Later</span></td>
+        </tr>
+        <tr>
+          <td class="name">Deploy the landing page</td>
+          <td class="num">Low</td><td class="num">Low</td><td class="num">None</td>
+          <td><span class="pill p-later">Later</span></td>
+        </tr>
+        <tr>
+          <td class="name">Auto-submit applications</td>
+          <td class="num">Low</td><td class="num">High</td><td class="num">None</td>
+          <td><span class="pill p-cut">Cut</span></td>
+        </tr>
+        <tr>
+          <td class="name">Turn ALYX into a paid product</td>
+          <td class="num">&mdash;</td><td class="num">High</td><td class="num">None</td>
+          <td><span class="pill p-cut">Cut</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <p><b>Why auto-submit scores low on impact, not just high on risk.</b> Your problem was never volume. You applied 50 times and had six real conversations, and the system recorded almost none of them. Sending 600 applications into a pipeline you cannot measure produces more noise and the same blindness.</p>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">The plan</p>
+  <h2>Now, Next, Later</h2>
+  <p class="sub">Three buckets, no dates. Dates on a solo project you build around shifts and interviews are fiction, and missing them just makes you feel behind. Order is the real commitment.</p>
+
+  <div class="lanes">
+    <div class="lane">
+      <div class="head"><h3>Now</h3><span class="why">one thing at a time, finished before the next starts</span></div>
+      <ul>
+        <li><b>Read the inbox, propose the updates.</b> Match confirmations and replies to applications, then show you a batch to approve with the source email cited on every proposed change. Never silent auto-writes, because a wrong status you did not see is worse than no status.</li>
+        <li><b>Backfill what is missing.</b> The 13 untracked August applications and six interview processes, recovered and entered.</li>
+      </ul>
+    </div>
+
+    <div class="lane">
+      <div class="head"><h3>Next</h3><span class="why">only after Now is actually done</span></div>
+      <ul>
+        <li><b>Answer library.</b> Every screening question you have ever answered, stored once, reused. This is the piece of the auto-apply idea genuinely worth having.</li>
+        <li><b>Follow-up nudges.</b> You have 25 applications quiet for 30 days or more. The system knows. It should tell you.</li>
+        <li><b>Fill the form, stop at submit.</b> Everything up to the button, then you review and send.</li>
+      </ul>
+    </div>
+
+    <div class="lane">
+      <div class="head"><h3>Later</h3><span class="why">real, just not now</span></div>
+      <ul>
+        <li><b>Desktop app on this data layer.</b> The UI exists but reads an old format.</li>
+        <li><b>Per-role resume tailoring.</b></li>
+        <li><b>Deploy the landing page,</b> once there is a repo behind its only button.</li>
+      </ul>
+    </div>
+
+    <div class="lane">
+      <div class="head"><h3>Not doing</h3><span class="why">written down so it stops coming back</span></div>
+      <ul>
+        <li><b>Auto-submitting applications.</b> Unreviewed answers to questions about work authorization, salary and experience go out under your name, and every major applicant tracking system prohibits it.</li>
+        <li><b>Making it a product for other people.</b> Not until it has worked for one person for a full search.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">The auto-apply idea, triaged</p>
+  <h2>What survives, and what does not</h2>
+  <p>Break any competitor into its parts before deciding. Most of what looks like one big feature is six small ones with very different value.</p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th>The piece</th><th>Verdict</th><th>Why</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="name">One feed across every board</td><td><span class="pill p-later">Have it</span></td><td>The scanner already does this.</td></tr>
+        <tr><td class="name">Scoring roles against your profile</td><td><span class="pill p-later">Have it</span></td><td>The evaluator already does this.</td></tr>
+        <tr><td class="name">Reusable screening answers</td><td><span class="pill p-now">Take it</span></td><td>The highest-friction part of applying, and it gets better every time you use it.</td></tr>
+        <tr><td class="name">Confirmation of what was sent</td><td><span class="pill p-now">Take it</span></td><td>Comes free with reading the inbox, and it is exactly what has been failing.</td></tr>
+        <tr><td class="name">Filling form fields for you</td><td><span class="pill p-next">Take it, later</span></td><td>Real time saved, but only worth building on top of the answer library.</td></tr>
+        <tr><td class="name">Drafting answers with AI</td><td><span class="pill p-next">Take it, with review</span></td><td>Fine as a draft you approve. Not fine as something that sends itself.</td></tr>
+        <tr><td class="name">Pressing submit for you</td><td><span class="pill p-cut">Leave it</span></td><td>The one piece that carries all the risk and the least benefit.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">The habit</p>
+  <h2>A twenty minute loop, once a week</h2>
+  <p class="sub">This is the entire job, repeated. It works whether you have four hours that week or none.</p>
+
+  <ol class="steps">
+    <li><div><h3>Update the status board</h3><p>What actually works today. Be unkind about it. Half-finished counts as not working.</p></div></li>
+    <li><div><h3>Ask what broke or changed</h3><p>New information beats old plans. The Gmail discovery reordered this entire roadmap in one afternoon.</p></div></li>
+    <li><div><h3>Pick exactly one thing for Now</h3><p>One. Two things in Now means neither gets finished, and unfinished work teaches you nothing.</p></div></li>
+    <li><div><h3>Define what done looks like</h3><p>Written down, before you start. "It reads Gmail and I approved 20 updates" is done. "Gmail integration" is not.</p></div></li>
+    <li><div><h3>Move everything else to Next or Later</h3><p>Nothing gets deleted, which is what makes it possible to let go of it this week.</p></div></li>
+  </ol>
+</section>
+
+<section>
+  <p class="eyebrow">Worth knowing anyway</p>
+  <h2>The words, decoded</h2>
+  <p class="sub">These come up in every product conversation, and in interviews for product roles.</p>
+
+  <dl>
+    <dt>Scope</dt>
+    <dd>Everything a piece of work includes. "Cutting scope" means shipping less of it, not doing it worse. The distinction is the whole skill.</dd>
+
+    <dt>MVP, minimum viable product</dt>
+    <dd>The smallest version that proves whether the idea works. Frequently misused to mean "the cheap version," which is how products end up bad rather than small.</dd>
+
+    <dt>Riskiest assumption</dt>
+    <dd>The belief that, if wrong, makes the whole feature pointless. Test it first, cheaply, before building around it.</dd>
+
+    <dt>Leading and lagging indicators</dt>
+    <dd>Lagging is the result you want and cannot control, like getting hired. Leading is what you can move this week that tends to produce it, like conversations started. Track both, work the leading one.</dd>
+
+    <dt>Definition of done</dt>
+    <dd>Written before the work starts. Without it, work expands until you are exhausted rather than finished.</dd>
+
+    <dt>Technical debt</dt>
+    <dd>A shortcut taken deliberately that will cost more later. Fine when named and chosen. Expensive when it just happens.</dd>
+  </dl>
+</section>
+
+<footer>
+  Built from the real state of ALYX and 51 tracked applications. Revise it whenever the facts change, which will be often.
+</footer>
+
+</div>
