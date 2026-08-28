@@ -87,6 +87,13 @@ node src/track.mjs add <url>         # record an application, details pulled fro
 node src/track.mjs list --stale 21   # applications with no movement in three weeks
 node src/track.mjs status <id> responded --note "recruiter replied"
 node src/track.mjs stats --lane career
+
+node src/inbox.mjs                   # read an email export, propose tracker updates
+node src/inbox.mjs --apply           # write the proposals you approved
+
+node src/serve.mjs                   # local server the browser extension talks to
+node src/serve.mjs --token           # the token to paste into the extension
+node src/canary.mjs                  # check the autofill field map against live forms
 ```
 
 ### Tracking
@@ -105,6 +112,45 @@ number hides which one you have.
 
 Every application carries a `lane`. One hire in a lane you are not targeting will
 otherwise make a broken funnel look solved.
+
+
+### Assisted apply
+
+A Chrome extension fills an application form from your profile and records what you
+sent. It never submits. That is the position, not a first-version limitation: the
+products that auto-submit send unreviewed screening answers, and a wrong salary number
+reaches forty employers before anyone notices.
+
+```bash
+node src/serve.mjs          # then load extension/ unpacked at chrome://extensions
+```
+
+The extension is deliberately thin. It observes a page and applies what it is told;
+everything that knows anything lives in ALYX. An extension carrying its own copy of your
+profile would be a second source of truth, which is the failure this project exists to
+fix.
+
+Fields resolve by `autocomplete` token first, then `id`, then visible label text.
+`autocomplete` leads because its tokens are a W3C standard, the same ones your browser's
+own autofill uses, so an ATS cannot break them without breaking Chrome autofill too. That
+makes the common fields near zero-maintenance and confines real breakage to screening
+questions. `canary.mjs` checks the anchors against a live posting per vendor and exits
+non-zero when a required one disappears, so a break surfaces on a schedule rather than
+halfway through an application.
+
+Greenhouse, Ashby and Lever are supported. Workday is not, deliberately: it is a
+multi-page wizard inside iframes and would cost more than the other three combined, so
+it gets the same "I submitted this" button that any unsupported site gets.
+
+### Reading your inbox
+
+`inbox.mjs` reads an email export and proposes tracker updates. It proposes; it never
+decides, and every proposal cites the email it came from. Classification is ordered
+regex, not a model, because a confident wrong guess about whether you were rejected is
+worse than no guess.
+
+Company matching is whole-word. An early version matched substrings and proposed
+rejecting an application at Ploy on the strength of an email from Employ.
 
 ## Design decisions
 
@@ -141,9 +187,21 @@ Honest state of things:
 
 - **Scanner**: working, four providers, verified against live boards.
 - **Evaluator**: working, Claude-backed, read-only.
-- **Tracker**: working. Records applications, append-only status history, funnel stats. Imports an existing career-ops tracker via `src/migrate.mjs`.
-- **Desktop app**: exists, but is not yet wired to this data layer. It currently reads a different tracker format. Porting it is the next piece of work.
-- **Reply detection**: not built. Status changes are manual. Nothing reads your inbox, so the tracker is only as current as the last time you told it something.
+- **Tracker**: working. Append-only status history, lanes, two funnel rates. Imports an
+  existing career-ops tracker via `src/migrate.mjs`.
+- **Inbox ingest**: working. Proposes, never decides. Needs an email export at
+  `data/inbox.json`.
+- **Local server**: working. Token auth, bound to 127.0.0.1, sends no CORS headers so a
+  page you visit cannot read your profile off localhost.
+- **Assisted apply**: working, verified against a live Greenhouse form. Ashby is
+  implemented but not yet verified against a live posting.
+- **Resume registry**: working. Reads your resume library off disk rather than a config
+  listing it, and records which resume went to which application.
+- **Resume tailoring**: not built. Applications use a chosen variant, not a per-role
+  rewrite.
+- **Answer library**: not built. Screening answers are not yet reused across applications.
+- **Desktop app**: exists, but still reads the old tracker format.
+- **Scheduling**: none. Every scan and sync is run by hand.
 
 ## License
 
