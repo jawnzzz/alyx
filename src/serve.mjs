@@ -34,6 +34,7 @@ import { randomBytes, timingSafeEqual } from 'crypto';
 
 import { canonicalUrl } from './normalize.mjs';
 import { load, save, makeApplication, addNote, LANES } from './store.mjs';
+import { catalogue, selectable } from './resumes.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const APPLICANT = join(ROOT, 'config', 'applicant.json');
@@ -155,7 +156,7 @@ async function applied(req, res) {
   catch (e) { return send(res, 400, { error: e.message }); }
 
   const { company, role = null, url = null, source = null, resumeUsed = null,
-          resumeVariant = null, lane = 'career', note = null, answers = null } = payload;
+          resumeVariant = null, resumeJoinerJobs = null, lane = 'career', note = null, answers = null } = payload;
 
   if (!company) return send(res, 400, { error: 'company is required' });
   if (!LANES.includes(lane)) return send(res, 400, { error: `unknown lane "${lane}"` });
@@ -172,6 +173,7 @@ async function applied(req, res) {
   // tracker can count applications but can never tell you which version works.
   app.resumeUsed = resumeUsed;
   app.resumeVariant = resumeVariant;
+  app.resumeJoinerJobs = resumeJoinerJobs;
 
   // Screening answers are kept so a future application can reuse them, and so a
   // wrong answer is traceable to the applications it went out on.
@@ -183,12 +185,25 @@ async function applied(req, res) {
   send(res, 201, { created: true, application: app });
 }
 
+
+/** GET /resumes — the resume library, read live off disk.
+ *
+ *  The archive is included but flagged, because it is history: knowing which
+ *  resume went to Okta is the whole point of recording this, but the archive is
+ *  never a choice for a new application. */
+function resumes(_req, res, url) {
+  const all = url.searchParams.get('all') === '1';
+  const rows = all ? catalogue() : selectable();
+  send(res, 200, { count: rows.length, resumes: rows });
+}
+
 // ---------------------------------------------------------------- server
 
 const ROUTES = {
   'GET /health': health,
   'GET /profile': profile,
   'GET /application': lookup,
+  'GET /resumes': resumes,
   'POST /applied': applied,
 };
 
