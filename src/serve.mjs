@@ -210,6 +210,17 @@ const server = createServer(async (req, res) => {
   }
 });
 
+/** An already-running ALYX is the most likely reason this port is taken, and it
+ *  is not an error worth a stack trace. Say what happened in one line. */
+server.on('error', (e) => {
+  if (e.code === 'EADDRINUSE') {
+    console.error(`Port ${PORT} is already in use. ALYX is probably already running.`);
+    console.error(`Check with: curl -s http://127.0.0.1:${PORT}/health`);
+    process.exit(1);
+  }
+  throw e;
+});
+
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`ALYX server on http://127.0.0.1:${PORT}  (localhost only)`);
   console.log(`token: node src/serve.mjs --token`);
