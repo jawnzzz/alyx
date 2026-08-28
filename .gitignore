@@ -7,3 +7,5 @@ data/
 !data/.gitkeep
 *.log
 .DS_Store
+config/applicant.json
+data/.server-token

@@ -1,0 +1,48 @@
+{
+  "_comment": "Standing answers for application forms. Copy to applicant.json and fill in. Gitignored, because this is your personal data and it never leaves your machine.",
+
+  "identity": {
+    "firstName": "",
+    "lastName": "",
+    "preferredName": "",
+    "email": "",
+    "phone": "",
+    "city": "",
+    "state": "",
+    "country": "United States"
+  },
+
+  "links": {
+    "linkedin": "",
+    "portfolio": "",
+    "github": ""
+  },
+
+  "eligibility": {
+    "authorizedToWorkUS": true,
+    "requiresSponsorshipNowOrFuture": false,
+    "willingToRelocate": false,
+    "noticePeriodDays": 14
+  },
+
+  "compensation": {
+    "_comment": "Per lane, because the markets differ. `default` is used when the lane is unknown.",
+    "default": "$100,000",
+    "career": "$100,000",
+    "other": ""
+  },
+
+  "voluntary": {
+    "_comment": "US EEO questions. Every value here may be the literal string 'decline' and ALYX will select the decline-to-answer option. Nothing here is ever required to submit an application.",
+    "gender": "decline",
+    "race": "decline",
+    "veteranStatus": "decline",
+    "disabilityStatus": "decline",
+    "hispanicOrLatino": "decline"
+  },
+
+  "documents": {
+    "_comment": "Default resume used when no tailored one has been built for the role. Path relative to the repo root, or absolute.",
+    "defaultResume": ""
+  }
+}
