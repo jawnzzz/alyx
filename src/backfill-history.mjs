@@ -19,7 +19,10 @@ import { load, save, find, STATUSES } from './store.mjs';
 const APPLY = process.argv.includes('--apply');
 
 const EVENTS = [
-  { company: 'CoStar',   at: '2026-07-06', status: 'interviewing', source: 'On-site final round, Arlington VA. From calendar invites: sourcing exercise, panel interview, office tour.' },
+  // Sources are described, not quoted. Recruiters' names and addresses are other
+  // people's personal data and have no business in a repository that is meant to
+  // be public. The detail that matters here is the date and the stage.
+  { company: 'CoStar',   at: '2026-07-06', status: 'interviewing', source: 'On-site final round, Arlington VA: sourcing exercise, panel interview, office tour. From calendar invites.' },
   { company: 'Lime',     at: '2026-06-17', status: 'interviewing', source: 'Interview invite via Ashby, Jun 17.' },
   { company: 'Equinox',  at: '2026-06-17', status: 'interviewing', source: 'Phone interview, then in-person interview confirmed via SmartRecruiters.' },
 ];
