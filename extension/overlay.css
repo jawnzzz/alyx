@@ -1,0 +1,26 @@
+/* Deliberately boring and out of the way. This sits on top of a page someone is
+   filling in a job application on, and it must never obscure a field. */
+#alyx-panel {
+  position: fixed; right: 16px; bottom: 16px; z-index: 2147483647;
+  width: 280px; max-height: 60vh; overflow: auto;
+  background: #14161a; color: #e6e8ec;
+  border: 1px solid #2a2f38; border-radius: 10px;
+  font: 13px/1.45 ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+  box-shadow: 0 8px 28px rgba(0,0,0,.35);
+}
+#alyx-panel .alyx-head { display: flex; align-items: center; justify-content: space-between; padding: 9px 12px; border-bottom: 1px solid #2a2f38; }
+#alyx-panel .alyx-mark { font-weight: 650; letter-spacing: .14em; font-size: 11px; color: #8ab4f8; }
+#alyx-panel .alyx-x { background: none; border: 0; color: #7b8494; font-size: 17px; cursor: pointer; line-height: 1; padding: 0 2px; }
+#alyx-panel .alyx-body { padding: 10px 12px; display: grid; gap: 5px; }
+#alyx-panel .alyx-status { color: #98a1b0; }
+#alyx-panel .alyx-ok { color: #7fd18f; }
+#alyx-panel .alyx-warn { color: #e8b657; }
+#alyx-panel .alyx-foot { display: flex; gap: 8px; padding: 0 12px 10px; }
+#alyx-panel button.alyx-fill, #alyx-panel button.alyx-record {
+  flex: 1; padding: 7px 9px; border-radius: 7px; cursor: pointer;
+  border: 1px solid #2f4a7a; background: #1b2740; color: #cfe0ff; font-size: 12px;
+}
+#alyx-panel button.alyx-record { border-color: #333a45; background: #1a1d23; color: #aab3c0; }
+#alyx-panel button:disabled { opacity: .45; cursor: default; }
+#alyx-panel .alyx-note { padding: 0 12px 11px; font-size: 11px; color: #6b7280; color: #6b7280; }
+#alyx-panel .alyx-note { color: #6b7280; }

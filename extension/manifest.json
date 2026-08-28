@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "ALYX Assisted Apply",
+  "version": "0.1.0",
+  "description": "Fills job applications from your local ALYX profile and records what you sent. Never submits for you.",
+
+  "permissions": ["storage", "activeTab", "scripting"],
+
+  "host_permissions": [
+    "http://127.0.0.1:4571/*",
+    "https://job-boards.greenhouse.io/*",
+    "https://boards.greenhouse.io/*",
+    "https://jobs.ashbyhq.com/*",
+    "https://jobs.lever.co/*"
+  ],
+
+  "background": { "service_worker": "background.js", "type": "module" },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "https://job-boards.greenhouse.io/*",
+        "https://boards.greenhouse.io/*",
+        "https://jobs.ashbyhq.com/*",
+        "https://jobs.lever.co/*"
+      ],
+      "js": ["content.js"],
+      "css": ["overlay.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "web_accessible_resources": [
+    { "resources": ["fields.json"], "matches": ["https://*/*"] }
+  ],
+
+  "options_page": "options.html",
+  "action": { "default_title": "ALYX" }
+}

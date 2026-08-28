@@ -1,0 +1,90 @@
+{
+  "_comment": "The field map. Data, not code, so a vendor DOM change is a one-line edit and not a rewrite.",
+
+  "_strategy": [
+    "Fields are resolved by trying anchors in order: autocomplete, then id, then",
+    "visible label text. `autocomplete` comes first deliberately. Its tokens are a",
+    "W3C standard, the same ones the browser's own autofill uses, so an ATS that",
+    "redesigns its form still has to honour them or break Chrome autofill too.",
+    "That makes the common fields near zero-maintenance, and confines real",
+    "breakage to the screening questions, which are matched on label text."
+  ],
+
+  "fields": [
+    { "key": "identity.firstName", "autocomplete": ["given-name"],     "id": ["first_name", "firstName"],  "label": ["first name", "legal first name"] },
+    { "key": "identity.lastName",  "autocomplete": ["family-name"],    "id": ["last_name", "lastName"],    "label": ["last name", "surname", "legal last name"] },
+    { "key": "identity.email",     "autocomplete": ["email"],          "id": ["email"],                    "label": ["email"] },
+    { "key": "identity.phone",     "autocomplete": ["tel"],            "id": ["phone"],                    "label": ["phone", "mobile", "telephone"] },
+    { "key": "identity.city",      "autocomplete": ["address-level2"], "id": ["city"],                     "label": ["city", "location (city)"] },
+    { "key": "identity.state",     "autocomplete": ["address-level1"], "id": ["state", "region"],          "label": ["state", "province"] },
+    { "key": "identity.country",   "autocomplete": ["country-name"],   "id": ["country"],                  "label": ["country"] },
+    { "key": "links.linkedin",     "autocomplete": [],                 "id": ["linkedin"],                 "label": ["linkedin", "linkedin profile", "linkedin url"] },
+    { "key": "links.portfolio",    "autocomplete": [],                 "id": ["website", "portfolio"],     "label": ["portfolio", "website", "personal site"] },
+    { "key": "links.github",       "autocomplete": [],                 "id": ["github"],                   "label": ["github"] }
+  ],
+
+  "questions": [
+    {
+      "_comment": "Yes/no and choice questions answered from the eligibility block. `invert` means a Yes on the form corresponds to false in the config.",
+      "key": "eligibility.authorizedToWorkUS",
+      "label": ["authorized to work", "legally authorized", "work authorization", "eligible to work"],
+      "type": "boolean"
+    },
+    {
+      "key": "eligibility.requiresSponsorshipNowOrFuture",
+      "label": ["require sponsorship", "need sponsorship", "visa sponsorship", "require visa"],
+      "type": "boolean"
+    },
+    {
+      "key": "eligibility.willingToRelocate",
+      "label": ["willing to relocate", "open to relocation"],
+      "type": "boolean"
+    },
+    {
+      "key": "compensation.default",
+      "label": ["salary expectation", "desired salary", "compensation expectation", "expected salary"],
+      "type": "text"
+    }
+  ],
+
+  "voluntary": {
+    "_comment": "EEO questions. These are always optional on US applications, so the safe default is the decline option. Matched loosely because the wording varies more than anything else on the form.",
+    "gender":            ["gender"],
+    "race":              ["race", "ethnicity", "racial"],
+    "veteranStatus":     ["veteran", "protected veteran"],
+    "disabilityStatus":  ["disability"],
+    "hispanicOrLatino":  ["hispanic", "latino"]
+  },
+
+  "declinePatterns": [
+    "decline to self identify",
+    "decline to self-identify",
+    "i don't wish to answer",
+    "i do not wish to answer",
+    "prefer not to say",
+    "prefer not to disclose",
+    "decline to answer",
+    "do not wish to disclose"
+  ],
+
+  "vendors": {
+    "greenhouse": {
+      "hosts": ["job-boards.greenhouse.io", "boards.greenhouse.io"],
+      "resumeInput": "input[type=file]",
+      "submitButton": ["button[type=submit]", "#submit_app"],
+      "companyFrom": "path:1"
+    },
+    "ashby": {
+      "hosts": ["jobs.ashbyhq.com"],
+      "resumeInput": "input[type=file]",
+      "submitButton": ["button[type=submit]"],
+      "companyFrom": "path:1"
+    },
+    "lever": {
+      "hosts": ["jobs.lever.co"],
+      "resumeInput": "input[type=file]",
+      "submitButton": ["button[type=submit]", "#btn-submit"],
+      "companyFrom": "path:1"
+    }
+  }
+}

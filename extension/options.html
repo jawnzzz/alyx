@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8"><title>ALYX</title>
+<style>
+ body { font: 14px/1.5 ui-sans-serif, -apple-system, sans-serif; max-width: 460px; margin: 40px auto; padding: 0 20px; color:#1a1d23; }
+ h1 { font-size: 16px; letter-spacing:.1em; } label { display:block; margin: 16px 0 4px; font-weight:600; }
+ input { width:100%; padding:8px; font-family: ui-monospace, monospace; font-size:12px; border:1px solid #ccd; border-radius:6px; }
+ button { margin-top:16px; padding:8px 14px; border-radius:6px; border:1px solid #2f4a7a; background:#1b2740; color:#fff; cursor:pointer; }
+ .s { margin-top:14px; padding:9px 11px; border-radius:6px; font-size:13px; }
+ .ok { background:#e8f6ec; color:#1c6b33; } .bad { background:#fdecec; color:#9b1c1c; }
+ code { background:#f2f3f5; padding:1px 5px; border-radius:4px; }
+</style>
+<h1>ALYX</h1>
+<p>Get your token by running <code>node src/serve.mjs --token</code> in the alyx folder.</p>
+<label>Server</label><input id="base" placeholder="http://127.0.0.1:4571">
+<label>Token</label><input id="token" type="password" placeholder="paste token">
+<button id="save">Save and test</button>
+<div id="status"></div>
+<script src="options.js"></script>
