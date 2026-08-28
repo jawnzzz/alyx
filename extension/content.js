@@ -18,7 +18,10 @@
 
   const send = (msg) => new Promise((r) => chrome.runtime.sendMessage(msg, r));
   const dig = (obj, path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj);
-  const norm = (s) => (s || '').replace(/\s+/g, ' ').trim().toLowerCase();
+  // Curly and straight apostrophes both appear in the wild, sometimes in the same
+  // form. "I don't wish to answer" must match "I don't wish to answer" or the
+  // decline option silently fails to be found.
+  const norm = (s) => (s || '').replace(/[\u2018\u2019\u02BC]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
 
   // ------------------------------------------------------------ finding fields
 
@@ -119,6 +122,54 @@
     return false;
   }
 
+
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+  /**
+   * Is this a react-select combobox rather than a real <select>?
+   *
+   * Greenhouse moved its EEO questions to react-select, which looks like a
+   * dropdown and behaves like nothing. It has no options in the DOM until it is
+   * opened, so it cannot be filled the way a <select> can.
+   */
+  function isCombobox(el) {
+    return el.getAttribute('role') === 'combobox' && Boolean(el.closest('.select__control'));
+  }
+
+  /**
+   * Drive a react-select by imitating a real user: open the control, read the
+   * options that appear, click the one that matches.
+   *
+   * React listens for bubbled native events at the document root and does not
+   * check isTrusted, so a dispatched sequence works. The full
+   * pointerdown/mousedown/mouseup/click run is needed because react-select opens
+   * on mousedown but other handlers expect the rest of the sequence.
+   */
+  async function pickCombobox(input, patterns) {
+    const control = input.closest('.select__control') || input.parentElement;
+    input.focus();
+    for (const type of ['pointerdown', 'mousedown', 'mouseup', 'click']) {
+      control.dispatchEvent(new MouseEvent(type, { bubbles: true, cancelable: true, button: 0 }));
+    }
+    await sleep(250);
+
+    const visible = (e) => e.offsetParent !== null;
+    const options = [...document.querySelectorAll('[class*="option"]')].filter(visible);
+    if (!options.length) return { ok: false, why: 'dropdown would not open' };
+
+    for (const p of patterns) {
+      const hit = options.find(o => norm(o.innerText).includes(norm(p)));
+      if (hit) {
+        hit.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        await sleep(150);
+        return { ok: true, chose: norm(hit.innerText) };
+      }
+    }
+    // Close it again rather than leaving an open menu over the form.
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    return { ok: false, why: `no option matched (offered: ${options.slice(0, 4).map(o => norm(o.innerText)).join(', ')})` };
+  }
+
   // ------------------------------------------------------------ the fill
 
   async function fill(profile, map) {
@@ -144,9 +195,15 @@
       if (value === undefined || value === null || value === '') continue;
       const found = resolve({ label: q.label, autocomplete: [], id: [] }, pool);
       if (!found) continue;
-      const ok = q.type === 'boolean' ? answerBoolean(found.el, Boolean(value))
-               : found.el.tagName === 'SELECT' ? chooseOption(found.el, String(value))
-               : (setValue(found.el, String(value)), true);
+      let ok;
+      if (isCombobox(found.el)) {
+        const r = await pickCombobox(found.el, q.type === 'boolean' ? [value ? 'yes' : 'no'] : [String(value)]);
+        ok = r.ok;
+      } else {
+        ok = q.type === 'boolean' ? answerBoolean(found.el, Boolean(value))
+           : found.el.tagName === 'SELECT' ? chooseOption(found.el, String(value))
+           : (setValue(found.el, String(value)), true);
+      }
       (ok ? filled : missed).push({ label: q.key, via: found.via, why: ok ? null : 'could not match an option' });
     }
 
@@ -158,17 +215,20 @@
       if (!want) continue;
       const found = resolve({ label: patterns, autocomplete: [], id: [] }, pool);
       if (!found) continue; // not asked on this form
-      if (found.el.tagName !== 'SELECT') {
-        // Greenhouse now renders EEO questions as custom comboboxes rather than
-        // a <select>. Driving those means opening a listbox, which is not built
-        // yet. Silently skipping would look like success, so say so instead.
-        missed.push({ label: `voluntary.${key}`, why: 'custom dropdown, fill it yourself' });
+
+      const wanted = want === 'decline' ? map.declinePatterns : [want];
+
+      if (isCombobox(found.el)) {
+        const r = await pickCombobox(found.el, wanted);
+        (r.ok ? filled : missed).push({ label: `voluntary.${key}`, via: found.via, why: r.ok ? null : r.why });
         continue;
       }
-      const ok = want === 'decline'
-        ? map.declinePatterns.some(p => chooseOption(found.el, p))
-        : chooseOption(found.el, want);
-      (ok ? filled : missed).push({ label: `voluntary.${key}`, via: found.via, why: ok ? null : 'no decline option offered' });
+      if (found.el.tagName !== 'SELECT') {
+        missed.push({ label: `voluntary.${key}`, why: 'unrecognised control, fill it yourself' });
+        continue;
+      }
+      const ok = wanted.some(p => chooseOption(found.el, p));
+      (ok ? filled : missed).push({ label: `voluntary.${key}`, via: found.via, why: ok ? null : 'no matching option offered' });
     }
 
     return { filled, missed };
