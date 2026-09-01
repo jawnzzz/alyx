@@ -26,16 +26,21 @@ Interview history for CoStar, Lime and Equinox was restored separately by
 
 ```
 applied            72
-any reply          20   27.8%   includes rejections
+any reply          19   26.4%   includes rejections
 engaged             5    6.9%   moved you forward
 ever interviewed    4
-never heard back   51
+never heard back   52
 still open         56
-quiet 30+ days     31
+quiet 30+ days     43
 ```
 
 The old tracker reported 3.9% and zero interviews. Both were wrong, and wrong in the
 pessimistic direction.
+
+An earlier version of these figures said 27.8%. That was a double-count: `stats` summed
+the status buckets, so CoStar, which reached `interviewing` and was then `rejected`,
+counted in both. Fixed 2026-09-01. The career-ops portal computed it correctly and
+disagreeing with it is what surfaced the bug.
 
 ## What is built
 

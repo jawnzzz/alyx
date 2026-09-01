@@ -194,8 +194,16 @@ function cmdStats() {
   // because a rejection email still means a human opened your application. A
   // search with 2% engagement and 16% replies has a different problem than one
   // where nothing comes back at all.
-  const engaged = ever.responded + ever.interviewing + ever.offer + ever.hired;
-  const anyReply = engaged + ever.rejected;
+  // Count APPLICATIONS, not status-bucket memberships. Summing the buckets
+  // double-counts anything that reached two of them, which is every application
+  // that got an interview and was then rejected: CoStar appeared in both
+  // `interviewing` and `rejected` and inflated the reply rate from 26.4% to
+  // 27.8%. The bug only surfaced once interview history was backfilled, because
+  // before that those applications knew only their final status.
+  const FORWARD = ['responded', 'interviewing', 'offer', 'hired'];
+  const reached = (a, set) => a.history.some(h => set.includes(h.status));
+  const engaged = rows.filter(a => reached(a, FORWARD)).length;
+  const anyReply = rows.filter(a => reached(a, [...FORWARD, 'rejected'])).length;
   const rate = applied ? ((engaged / applied) * 100).toFixed(1) : '0.0';
   const replyRate = applied ? ((anyReply / applied) * 100).toFixed(1) : '0.0';
 
@@ -205,6 +213,7 @@ function cmdStats() {
   const out = {
     applied,
     everEngaged: engaged,
+    anyReply,
     everInterviewed: ever.interviewing,
     everOffered: ever.offer + ever.hired,
     hired: ever.hired,
@@ -221,7 +230,7 @@ function cmdStats() {
   if (AS_JSON) return console.log(JSON.stringify(out, null, 2));
 
   log(`applied            ${out.applied}`);
-  log(`any reply          ${out.rejected + out.everEngaged}   (${out.anyReplyRate})   includes rejections`);
+  log(`any reply          ${out.anyReply}   (${out.anyReplyRate})   includes rejections`);
   log(`engaged            ${out.everEngaged}   (${out.engagementRate})   moved you forward`);
   log(`ever interviewed   ${out.everInterviewed}`);
   log(`ever offered       ${out.everOffered}`);
