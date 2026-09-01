@@ -24,3 +24,9 @@
 #alyx-panel button:disabled { opacity: .45; cursor: default; }
 #alyx-panel .alyx-note { padding: 0 12px 11px; font-size: 11px; color: #6b7280; color: #6b7280; }
 #alyx-panel .alyx-note { color: #6b7280; }
+
+/* Embedded in an iframe: the frame's viewport is not the window's, so a fixed
+   panel can end up parked off-screen. Sit at the top of the form instead. */
+#alyx-panel.alyx-embedded {
+  position: absolute; top: 12px; right: 12px; bottom: auto; max-height: none;
+}

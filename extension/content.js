@@ -263,6 +263,11 @@
   function panel() {
     const el = document.createElement('div');
     el.id = PANEL_ID;
+    // Inside an embedded form (Airbnb wraps Greenhouse in an iframe, and it is
+    // not the only one), position:fixed anchors to the frame's viewport rather
+    // than the window's, which can park the panel somewhere the reader never
+    // scrolls past. Pin it to the top of the form instead.
+    if (window.top !== window.self) el.classList.add('alyx-embedded');
     el.innerHTML = `
       <div class="alyx-head"><span class="alyx-mark">ALYX</span><button class="alyx-x" title="close">×</button></div>
       <div class="alyx-body"><div class="alyx-status">checking ALYX…</div></div>
@@ -291,6 +296,11 @@
     const map = await fetch(chrome.runtime.getURL('fields.json')).then(r => r.json());
     const vendor = vendorFor(map);
     if (!vendor) return;
+
+    // With all_frames on, this also runs in analytics pixels and chat widgets.
+    // A frame with no fillable control is not an application form, and putting a
+    // panel on one is noise.
+    if (controls().length < 3) return;
 
     const box = panel();
     const status = box.querySelector('.alyx-status');

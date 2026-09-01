@@ -3,9 +3,11 @@
   "name": "ALYX Assisted Apply",
   "version": "0.1.0",
   "description": "Fills job applications from your local ALYX profile and records what you sent. Never submits for you.",
-
-  "permissions": ["storage", "activeTab", "scripting"],
-
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
   "host_permissions": [
     "http://127.0.0.1:4571/*",
     "https://job-boards.greenhouse.io/*",
@@ -13,9 +15,10 @@
     "https://jobs.ashbyhq.com/*",
     "https://jobs.lever.co/*"
   ],
-
-  "background": { "service_worker": "background.js", "type": "module" },
-
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -24,16 +27,28 @@
         "https://jobs.ashbyhq.com/*",
         "https://jobs.lever.co/*"
       ],
-      "js": ["content.js"],
-      "css": ["overlay.css"],
-      "run_at": "document_idle"
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "overlay.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
     }
   ],
-
   "web_accessible_resources": [
-    { "resources": ["fields.json"], "matches": ["https://*/*"] }
+    {
+      "resources": [
+        "fields.json"
+      ],
+      "matches": [
+        "https://*/*"
+      ]
+    }
   ],
-
   "options_page": "options.html",
-  "action": { "default_title": "ALYX" }
+  "action": {
+    "default_title": "ALYX"
+  }
 }
