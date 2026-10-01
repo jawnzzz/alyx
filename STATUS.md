@@ -1,6 +1,29 @@
 # ALYX status
 
-**Updated 2026-08-28.** Read this first on a "where were we" session.
+**Updated 2026-09-06.** Read this first on a "where were we" session.
+
+## Outcome: Bechtel, hired
+
+Lindsey accepted an offer from **Bechtel** (Talent Acquisition Specialist, contract, $61/hr,
+via Capitol Careers / Jacqueline). Starts **2026-09-28**. Interviewed 2026-09-01 with Andrea
+San Martin. Recorded in `data/applications.json` (id `86f9ed5179`, status `hired`).
+
+**Known risk worth revisiting closer to the start date:** research on Bechtel's TA team found
+a contractor placed through a different staffing agency (TekStream) whose contract ended
+abruptly a few months in, alongside a colleague, with no evidence of a broader company-wide
+cause. Not a reason the offer was wrong to accept, just a reason not to fully stand down the
+active search once she starts, and to ask Andrea directly about contract length/conversion
+odds early on.
+
+**⚠️ Open debt: 2026-09-01 to 2026-09-06 session's work never touched ALYX.** A session on
+2026-09-06 ran an entire round of new work (Nourish, Philips, PVOLVE, Aescape, Cenegenics,
+Nielsen, plus the Bechtel interview prep itself) directly against `~/career-ops`, apparently
+without reading this file first. That violates the 2026-08-28 decision below. career-ops now
+has reports #030 to #035 and tracker rows #79 to #84 that don't exist in ALYX. Lindsey's call
+(2026-09-06): record the Bechtel outcome in ALYX now, backfill the rest of that session's
+entries into ALYX later. **Next session: do that backfill**, then re-confirm this doesn't keep
+happening (the router/skill invocation is defaulting to career-ops instead of checking here
+first).
 
 ## The decision that matters
 

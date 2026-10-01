@@ -7,7 +7,13 @@
   "scripts": {
     "scan": "node src/scan.mjs",
     "scan:new": "node src/scan.mjs --matched-only --since 7",
-    "evaluate": "node src/evaluate.mjs --matched-only"
+    "evaluate": "node src/evaluate.mjs --matched-only",
+    "demo": "node src/seed.mjs",
+    "demo:clear": "node src/seed.mjs --clear",
+    "serve": "node src/serve.mjs",
+    "canary": "node src/canary.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }
