@@ -12,3 +12,4 @@ data/.server-token
 config/resumes.json
 STATUS.md
 src/backfill-history.mjs
+brand/screenshot-app.png
