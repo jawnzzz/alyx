@@ -196,9 +196,9 @@ function cmdStats() {
   // where nothing comes back at all.
   // Count APPLICATIONS, not status-bucket memberships. Summing the buckets
   // double-counts anything that reached two of them, which is every application
-  // that got an interview and was then rejected: CoStar appeared in both
-  // `interviewing` and `rejected` and inflated the reply rate from 26.4% to
-  // 27.8%. The bug only surfaced once interview history was backfilled, because
+  // that got an interview and was then rejected appeared in both `interviewing`
+  // and `rejected`, inflating the reply rate by one application per occurrence.
+  // The bug only surfaced once interview history was backfilled, because
   // before that those applications knew only their final status.
   const FORWARD = ['responded', 'interviewing', 'offer', 'hired'];
   const reached = (a, set) => a.history.some(h => set.includes(h.status));

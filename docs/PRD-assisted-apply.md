@@ -2,7 +2,7 @@
 
 **Status:** draft, awaiting sign-off
 **Written:** 2026-08-27
-**Owner:** Lindsey Joiner
+**Owner:** maintainer
 
 ---
 
@@ -39,7 +39,7 @@ because nothing has ever recorded which resume went where.
 
 - **Chrome extension (MV3)** that detects a supported application form and fills it.
 - **Field mapping for Ashby and Greenhouse first.** Together these are 53% of applications
-  (17 and 13 of the 57 confirmation emails on file). Workday (9) and SmartRecruiters (4)
+  (measured from the confirmation emails in the maintainer's own inbox). Workday (9) and SmartRecruiters (4)
   come later.
 - **Local ALYX server** on localhost that the extension talks to. The extension holds no
   data of its own. One source of truth, which is the entire point.
@@ -55,8 +55,8 @@ because nothing has ever recorded which resume went where.
 
 ### Explicitly out
 
-- **Auto-submit.** ALYX fills and stops. Lindsey presses submit. This is not a v1 shortcut
-  to be revisited later, it is the product's position. Employable submits applications with
+- **Auto-submit.** ALYX fills and stops. the user presses submit. This is not a v1 shortcut
+  to be revisited later, it is the product's position. Some tools in this category submit applications with
   unreviewed screening answers, which is how a wrong salary number or a misspelled name
   reaches forty employers before anyone notices.
 - **Cover letter generation.** Separate problem, separate quality bar.
@@ -89,7 +89,7 @@ because nothing has ever recorded which resume went where.
                                        (instant if already scanned)
   render fill preview ◀──────────      field map + values
         │
-   [ Lindsey reviews, edits, submits ]
+   [ user reviews, edits, submits ]
         │
   detect submit       ──────────▶ POST /applied
                                        writes applications.json,

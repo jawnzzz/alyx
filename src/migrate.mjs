@@ -13,7 +13,7 @@
  * Usage:
  *   node src/migrate.mjs --from ~/career-ops/data/applications.md
  *   node src/migrate.mjs --from <path> --apply
- *   node src/migrate.mjs --from <path> --apply --other Equinox
+ *   node src/migrate.mjs --from <path> --apply --other "Side Job Inc"
  *
  * --other <company>   mark rows from this company as lane "other" rather than
  *                     "career". Repeatable. Use it for real jobs that are not

@@ -156,7 +156,7 @@ async function applied(req, res) {
   catch (e) { return send(res, 400, { error: e.message }); }
 
   const { company, role = null, url = null, source = null, resumeUsed = null,
-          resumeVariant = null, resumeJoinerJobs = null, lane = 'career', note = null, answers = null } = payload;
+          resumeVariant = null, resumeTags = null, lane = 'career', note = null, answers = null } = payload;
 
   if (!company) return send(res, 400, { error: 'company is required' });
   if (!LANES.includes(lane)) return send(res, 400, { error: `unknown lane "${lane}"` });
@@ -173,7 +173,9 @@ async function applied(req, res) {
   // tracker can count applications but can never tell you which version works.
   app.resumeUsed = resumeUsed;
   app.resumeVariant = resumeVariant;
-  app.resumeJoinerJobs = resumeJoinerJobs;
+  // Tags carry which optional entries this resume included, so the outcome can
+  // later be compared against the choice.
+  app.resumeTags = resumeTags;
 
   // Screening answers are kept so a future application can reuse them, and so a
   // wrong answer is traceable to the applications it went out on.
@@ -189,7 +191,8 @@ async function applied(req, res) {
 /** GET /resumes — the resume library, read live off disk.
  *
  *  The archive is included but flagged, because it is history: knowing which
- *  resume went to Okta is the whole point of recording this, but the archive is
+ *  resume went to which employer is the whole point of recording this, but the
+ *  archive is
  *  never a choice for a new application. */
 function resumes(_req, res, url) {
   const all = url.searchParams.get('all') === '1';

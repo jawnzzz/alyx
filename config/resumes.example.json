@@ -1,0 +1,25 @@
+{
+  "_comment": "Where your resumes live and how to classify them. Copy to resumes.json. Gitignored, because the paths are yours.",
+
+  "folders": [
+    { "path": "~/Documents/Resumes/working",  "kind": "working",
+      "_comment": "Base variants. These are what a tailored resume is built from." },
+    { "path": "~/Documents/Resumes/general",  "kind": "general",
+      "_comment": "General-purpose versions, used when no variant fits better." },
+    { "path": "~/Documents/Resumes/archive",  "kind": "archive",
+      "_comment": "What actually went out. Read-only history, never offered for a new application." }
+  ],
+
+  "variants": [
+    { "id": "recruiting", "label": "recruiting, general",   "match": "Recruiting" },
+    { "id": "cs-ops",     "label": "customer success / ops", "match": "CS OPS|customer-success" },
+    { "id": "technical",  "label": "technical",              "match": "Technical" }
+  ],
+
+  "_variantsNote": "Order matters. The first pattern a filename matches wins, so put specific patterns before generic ones. `match` is a case-insensitive regular expression.",
+
+  "tags": [
+    { "id": "includesSideProject", "match": "\\(no side project\\)", "absent": true,
+      "_comment": "Marks the near-duplicate pairs. `absent: true` means the tag applies when the pattern does NOT match, so a file named '(no side project)' loses the tag. Recording it is the point: whether that entry helps is only answerable if the choice sits next to the outcome." }
+  ]
+}
