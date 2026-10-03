@@ -11,7 +11,9 @@
     "demo": "node src/seed.mjs",
     "demo:clear": "node src/seed.mjs --clear",
     "serve": "node src/serve.mjs",
-    "canary": "node src/canary.mjs"
+    "canary": "node src/canary.mjs",
+    "backup": "node src/backup.mjs",
+    "backup:status": "node src/backup.mjs --status"
   },
   "engines": {
     "node": ">=20"
