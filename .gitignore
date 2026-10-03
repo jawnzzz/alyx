@@ -13,3 +13,4 @@ config/resumes.json
 STATUS.md
 src/backfill-history.mjs
 brand/screenshot-app.png
+config/secrets.json
