@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo — ALYX</title>
+<meta name="description" content="Click through ALYX with invented data. Review scored roles, open one, apply, and see it land in a tracker that keeps its history.">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' fill='%230b0b0b'/></svg>">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Demo-only chrome. The shared stylesheet covers everything else. */
+  .app { border: 1px solid var(--ink); display: flex; flex-wrap: wrap; margin: 28px 0 0; background: #fff; }
+  .side { flex: 0 0 196px; border-right: 1px solid var(--rule); padding: 20px 0 20px 20px; }
+  .side .brand { font-weight: 600; letter-spacing: 0.22em; font-size: 14px; margin-bottom: 22px; }
+  .side button { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 10px;
+    text-align: left; background: none; border: 0; border-right: 3px solid transparent;
+    padding: 11px 12px 11px 0; font: inherit; font-size: 14px; min-height: 44px; cursor: pointer; color: var(--ink); }
+  .side button[aria-current="page"] { background: var(--wash); border-right-color: var(--ink); font-weight: 600; }
+  .side .count { font-family: var(--mono); font-size: 12px; color: var(--faint); padding-right: 11px; }
+  .pane { flex: 999 1 460px; min-width: 0; padding: 22px 24px 28px; }
+  .pane h3 { font-size: 19px; font-weight: 600; margin: 0 0 2px; }
+  .panehead { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: baseline;
+    padding-bottom: 13px; border-bottom: 1px solid var(--ink); margin-bottom: 16px; }
+  .panehead .meta { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .row { border-bottom: 1px solid var(--rule); }
+  .row > button { display: flex; width: 100%; gap: 12px; align-items: baseline; flex-wrap: wrap;
+    text-align: left; background: none; border: 0; padding: 13px 10px; font: inherit; min-height: 44px; cursor: pointer; color: var(--ink); }
+  .row[data-open="1"] > button { background: var(--wash); }
+  .row .co { font-weight: 600; font-size: 14.5px; flex: 0 0 166px; }
+  .row .ti { font-size: 13.5px; color: var(--body); flex: 999 1 180px; min-width: 0; }
+  .row .sc, .row .dt { font-family: var(--mono); font-size: 13px; }
+  .row .sc { font-weight: 600; flex: 0 0 42px; text-align: right; }
+  .row .dt { flex: 0 0 90px; color: var(--muted); }
+  .row .st { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; border: 1px solid var(--ink); padding: 2px 7px; flex: 0 0 96px; text-align: center; }
+  .row .ca { font-family: var(--mono); color: var(--faint); flex: 0 0 16px; text-align: right; }
+  .detail { background: var(--wash); border-top: 1px solid var(--rule); padding: 20px 12px 20px 36px; display: flex; flex-wrap: wrap; gap: 28px; }
+  .detail dl { margin: 0; flex: 0 0 168px; }
+  .detail dt { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 3px; text-transform: uppercase; }
+  .detail dd { margin: 0 0 12px; font-size: 13.5px; }
+  .detail .why { flex: 999 1 260px; min-width: 0; }
+  .detail .why p { font-size: 13.5px; margin: 0 0 14px; }
+  .act { display: flex; gap: 8px; flex-wrap: wrap; }
+  .act button { font: inherit; font-size: 13px; padding: 10px 16px; min-height: 44px; cursor: pointer; border-radius: 2px; }
+  .act .primary { background: var(--ink); color: #fff; border: 1px solid var(--ink); }
+  .act .ghost { background: none; color: var(--ink); border: 1px solid var(--ink); }
+  .hist { list-style: none; margin: 0; padding: 0; }
+  .hist li { display: flex; gap: 12px; padding: 6px 0 6px 14px; border-left: 1px solid #cbcbc4; font-size: 13px; }
+  .hist .at { font-family: var(--mono); color: var(--muted); flex: 0 0 82px; }
+  .empty { color: var(--faint); font-size: 14px; padding: 26px 0; }
+  .flash { font-family: var(--mono); font-size: 12.5px; color: var(--muted); margin-top: 12px; min-height: 1.2em; }
+  @media (max-width: 640px) { .side { flex-basis: 100%; border-right: 0; border-bottom: 1px solid var(--rule); padding: 16px 16px 10px; } .side button { border-right: 0; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a href="index.html" class="mark" style="text-decoration:none">ALYX</a>
+    <nav>
+      <a href="index.html#how">How it works</a>
+      <a href="index.html#never">What it won't do</a>
+      <a href="about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="lede" style="padding-bottom:0">
+    <div class="kicker">DEMO &middot; INVENTED DATA</div>
+    <h1>Click through it</h1>
+    <p class="sub">Every company and number below is made up. Open a role to see why it scored what it did, apply to it, and watch it land in a tracker that keeps its history instead of overwriting it.</p>
+  </div>
+
+  <div class="app">
+    <nav class="side" aria-label="Demo sections">
+      <div class="brand">ALYX</div>
+      <button type="button" data-view="today" aria-current="page">Today <span class="count">1</span></button>
+      <button type="button" data-view="matches">Matches <span class="count" id="cMatches">5</span></button>
+      <button type="button" data-view="apps">Applications <span class="count" id="cApps">5</span></button>
+    </nav>
+    <div class="pane" id="pane"></div>
+  </div>
+  <p class="flash" id="flash"></p>
+
+  <section style="border-bottom:0">
+    <h2>Want the real thing?</h2>
+    <p>The demo above is a sketch. The actual tool runs on your machine, scans live job boards and fills real applications.</p>
+<pre><span class="c">$</span> git clone https://github.com/jawnzzz/alyx &amp;&amp; cd alyx
+<span class="c">$</span> npm run demo</pre>
+    <p class="note"><a href="index.html#start">Full quickstart</a> &middot; <a href="about.html">Who built this</a></p>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0">MIT licensed. <a href="https://github.com/jawnzzz/alyx">Source on GitHub</a>.</p>
+    <p style="margin:6px 0 0">This page runs one inline script to make the demo clickable. No third-party requests, no analytics, nothing recorded.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var matches = [
+    { id:1, co:'Hooli', ti:'Senior Recruiter, GTM', sc:'4.6', loc:'Remote, USA', posted:'2 days ago', pay:'$125k - $155k', board:'ashby',
+      why:'Full-cycle recruiting at a company scaling through a growth stage, the closest match here to your last role. Remote, and the range clears your floor.' },
+    { id:2, co:'Northwind Traders', ti:'Recruiting Operations Manager', sc:'4.4', loc:'Washington, DC', posted:'4 days ago', pay:'$118k - $140k', board:'greenhouse',
+      why:'Operations scope rather than pure sourcing, and DC is your home market rather than a relocation. Closest to the lane you listed as primary.' },
+    { id:3, co:'Stark Industries', ti:'Customer Success Lead', sc:'4.2', loc:'Austin, TX, remote', posted:'1 day ago', pay:'$110k - $132k', board:'ashby',
+      why:'Secondary lane. Client-facing ownership maps to your escalation work, but there is no recruiting component to lean on.' },
+    { id:4, co:'Globex', ti:'Talent Acquisition Partner', sc:'3.8', loc:'New York, NY', posted:'6 days ago', pay:'$105k - $125k', board:'ashby',
+      why:'Solid lane fit, but on-site in New York and the range starts below your target. Worth a look only if you would move.' },
+    { id:5, co:'Gringotts', ti:'Client Operations Analyst', sc:'3.1', loc:'Remote, USA', posted:'3 days ago', pay:'$88k - $104k', board:'lever',
+      why:'Analyst scope is a step down from what you have run, and the top of the range sits near your floor.' }
+  ];
+
+  var apps = [
+    { id:'a1', dt:'2026-09-28', co:'Northwind Traders', ti:'Recruiting Operations Manager', st:'RESPONDED', resume:'recruiting-ops.docx',
+      src:'Greenhouse confirmation, then a recruiter reply.', hist:[['2026-09-14','applied'],['2026-09-28','responded']] },
+    { id:'a2', dt:'2026-09-20', co:'Globex', ti:'Talent Acquisition Partner', st:'INTERVIEW', resume:'recruiting-general.docx',
+      src:'Ashby confirmation, then a scheduling invite.', hist:[['2026-09-02','applied'],['2026-09-11','responded'],['2026-09-20','interviewing']] },
+    { id:'a3', dt:'2026-09-18', co:'Initech', ti:'Technical Recruiter', st:'REJECTED', resume:'technical.docx',
+      src:'Rejection email. Reached a first call before it closed.', hist:[['2026-08-24','applied'],['2026-09-04','responded'],['2026-09-18','rejected']] },
+    { id:'a4', dt:'2026-09-12', co:'Acme Corp', ti:'Sourcing Specialist', st:'APPLIED', resume:'recruiting-general.docx',
+      src:'Greenhouse confirmation. Nothing since.', hist:[['2026-09-12','applied']] },
+    { id:'a5', dt:'2026-09-06', co:'Soylent Corp', ti:'People Operations Associate', st:'APPLIED', resume:'cs-ops.docx',
+      src:'Lever confirmation. Quiet for 26 days.', hist:[['2026-09-06','applied']] }
+  ];
+
+  var view = 'today', openMatch = 2, openApp = null;
+  var pane = document.getElementById('pane');
+  var flash = document.getElementById('flash');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+    });
+  }
+
+  function say(msg) { flash.textContent = msg; }
+
+  function head(title, meta) {
+    return '<div class="panehead"><h3>' + esc(title) + '</h3><span class="meta">' + esc(meta) + '</span></div>';
+  }
+
+  function renderToday() {
+    return head('Today', 'Thursday, Oct 2') +
+      '<div style="border:1px solid var(--ink);padding:20px 22px;margin-bottom:18px">' +
+        '<div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--muted);margin-bottom:9px">DO THIS NOW</div>' +
+        '<div style="font-size:21px;font-weight:600;margin-bottom:6px">Reply to Northwind Traders</div>' +
+        '<p style="font-size:14px;margin:0 0 16px">They replied four days ago and are waiting on you. The only application with someone actively holding the door open.</p>' +
+        '<div class="act"><button type="button" class="primary" data-act="draft">Draft a reply</button>' +
+        '<button type="button" class="ghost" data-act="brief">Brief me</button></div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--rule)">' +
+        tile(matches.length, 'roles to review') +
+        tile('20%', 'reply rate, 45 applied') +
+        tile('24', 'silent 30+ days', true) +
+      '</div>';
+  }
+
+  function tile(n, label, last) {
+    return '<div style="padding:16px 18px' + (last ? '' : ';border-right:1px solid var(--rule)') + '">' +
+      '<div style="font-family:var(--mono);font-size:26px;font-weight:600">' + esc(n) + '</div>' +
+      '<div style="font-size:12.5px;color:var(--body);margin-top:4px">' + esc(label) + '</div></div>';
+  }
+
+  function renderMatches() {
+    if (!matches.length) {
+      return head('Matches', 'nothing left') + '<p class="empty">You have been through all of them. Run a scan for more.</p>';
+    }
+    var h = head('Matches', '1156 scanned &middot; 808 passed &middot; ' + matches.length + ' matched');
+    matches.forEach(function (m, i) {
+      var open = openMatch === m.id;
+      h += '<div class="row" data-open="' + (open ? 1 : 0) + '">' +
+        '<button type="button" data-match="' + m.id + '" aria-expanded="' + open + '">' +
+          '<span class="dt" style="flex:0 0 28px">' + ('0' + (i + 1)).slice(-2) + '</span>' +
+          '<span class="co">' + esc(m.co) + '</span>' +
+          '<span class="ti">' + esc(m.ti) + '</span>' +
+          '<span class="sc">' + esc(m.sc) + '</span>' +
+          '<span class="ca">' + (open ? '&minus;' : '+') + '</span>' +
+        '</button>';
+      if (open) {
+        h += '<div class="detail">' +
+          '<dl><dt>Location</dt><dd>' + esc(m.loc) + '</dd><dt>Posted</dt><dd>' + esc(m.posted) + '</dd></dl>' +
+          '<dl><dt>Pay range</dt><dd>' + esc(m.pay) + '</dd><dt>Board</dt><dd>' + esc(m.board) + '</dd></dl>' +
+          '<div class="why"><dt style="font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase">Why it scored ' + esc(m.sc) + '</dt>' +
+          '<p>' + esc(m.why) + '</p>' +
+          '<div class="act"><button type="button" class="primary" data-apply="' + m.id + '">Autofill this application</button>' +
+          '<button type="button" class="ghost" data-skip="' + m.id + '">Skip</button></div></div>' +
+        '</div>';
+      }
+      h += '</div>';
+    });
+    return h;
+  }
+
+  function renderApps() {
+    var h = head('Applications', apps.length + ' tracked &middot; history never overwritten');
+    apps.forEach(function (a) {
+      var open = openApp === a.id;
+      h += '<div class="row" data-open="' + (open ? 1 : 0) + '">' +
+        '<button type="button" data-app="' + esc(a.id) + '" aria-expanded="' + open + '">' +
+          '<span class="dt">' + esc(a.dt) + '</span>' +
+          '<span class="co">' + esc(a.co) + '</span>' +
+          '<span class="ti">' + esc(a.ti) + '</span>' +
+          '<span class="st">' + esc(a.st) + '</span>' +
+          '<span class="ca">' + (open ? '&minus;' : '+') + '</span>' +
+        '</button>';
+      if (open) {
+        var items = a.hist.map(function (s) {
+          return '<li><span class="at">' + esc(s[0]) + '</span><span>' + esc(s[1]) + '</span></li>';
+        }).join('');
+        h += '<div class="detail">' +
+          '<div style="flex:0 0 250px"><dt style="font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:8px">History</dt>' +
+          '<ul class="hist">' + items + '</ul></div>' +
+          '<div class="why"><dt style="font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase">Resume sent</dt>' +
+          '<p style="font-family:var(--mono)">' + esc(a.resume) + '</p>' +
+          '<dt style="font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase">Source</dt>' +
+          '<p>' + esc(a.src) + '</p></div>' +
+        '</div>';
+      }
+      h += '</div>';
+    });
+    return h;
+  }
+
+  function render() {
+    pane.innerHTML = view === 'today' ? renderToday() : view === 'matches' ? renderMatches() : renderApps();
+    document.getElementById('cMatches').textContent = matches.length;
+    document.getElementById('cApps').textContent = apps.length;
+    Array.prototype.forEach.call(document.querySelectorAll('.side button'), function (b) {
+      if (b.dataset.view === view) b.setAttribute('aria-current', 'page');
+      else b.removeAttribute('aria-current');
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('button');
+    if (!t) return;
+
+    if (t.dataset.view) { view = t.dataset.view; say(''); return render(); }
+    if (t.dataset.match) { var id = +t.dataset.match; openMatch = openMatch === id ? null : id; return render(); }
+    if (t.dataset.app) { openApp = openApp === t.dataset.app ? null : t.dataset.app; return render(); }
+
+    if (t.dataset.skip) {
+      matches = matches.filter(function (m) { return m.id !== +t.dataset.skip; });
+      openMatch = null;
+      say('Skipped. It will not come back in the next scan.');
+      return render();
+    }
+
+    if (t.dataset.apply) {
+      var m = matches.filter(function (x) { return x.id === +t.dataset.apply; })[0];
+      if (!m) return;
+      matches = matches.filter(function (x) { return x.id !== m.id; });
+      apps.unshift({
+        id: 'n' + m.id, dt: '2026-10-02', co: m.co, ti: m.ti, st: 'APPLIED',
+        resume: 'recruiting-general.docx',
+        src: 'Filled by ALYX, submitted by you, recorded automatically.',
+        hist: [['2026-10-02', 'applied']]
+      });
+      openMatch = null; openApp = 'n' + m.id; view = 'apps';
+      say('Recorded. In the real tool the form is filled and you press submit.');
+      return render();
+    }
+
+    if (t.dataset.act) { say('Not wired up in the demo. The real one drafts from your tracker and your CV.'); }
+  });
+
+  render();
+})();
+</script>
+
+</body>
+</html>
