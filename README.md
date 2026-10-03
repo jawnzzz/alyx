@@ -203,6 +203,33 @@ Honest state of things:
 - **Desktop app**: exists, but still reads the old tracker format.
 - **Scheduling**: none. Every scan and sync is run by hand.
 
+## Prior art, and how this was built
+
+ALYX did not start from nothing. [career-ops](https://github.com/career-ops-hq/career-ops),
+by Santiago Fernández de Valderrama and its contributors, is where the idea came from: that
+public ATS boards are scannable, that a model can score roles against a profile, and that all
+of it can run on one machine with no account. It is MIT licensed and worth your time.
+
+The limit I hit was history. Its tracker keeps one status per application, so a process that
+ended in a rejection no longer shows the interview that came before it. That is a reasonable
+design choice and a fine one for most people. It was the wrong one for me, because the thing
+I most wanted to know was which stage applications were dying at, and that is why `store.mjs`
+is append-only.
+
+**ALYX is written from scratch, not forked, and shares no code with career-ops.** That was
+checked rather than assumed: a line-level comparison across both codebases found only generic
+JavaScript in common, the `import` statements and `process.argv.slice(2)` that every Node
+project contains. The HTML and Workday helpers have matching function names and entirely
+different implementations. No prose is shared.
+
+The one deliberate connection is `src/migrate.mjs`, which reads career-ops' tracker file so
+anyone moving across keeps the history they already have.
+
+**The code was written with Claude.** The author is a recruiter, not a software engineer. The
+judgment that shaped it is from the hiring side: that a tracker storing one status per row
+loses its interviews, that a tool filling screening answers has to stop before it submits,
+and that a matcher confidently proposing the wrong company is worse than one that asks.
+
 ## License
 
 MIT
