@@ -1,0 +1,79 @@
+/* This page loads nothing from anywhere. No fonts, no scripts, no analytics,
+     no third-party requests at all. It would be odd to say "nothing leaves your
+     machine" on a page that phones home to four CDNs. */
+  :root {
+    --ink: #0b0b0b;
+    --body: #2e2e2a;
+    --muted: #6b6b64;
+    --faint: #8f8f88;
+    --rule: #dcdcd6;
+    --wash: #f4f4f1;
+    --sans: system-ui, -apple-system, "Segoe UI", Helvetica, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: #fff; color: var(--ink);
+    font-family: var(--sans); font-size: 17px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--ink); text-underline-offset: 3px; }
+  a:hover { color: #000; }
+  h1, h2, h3 { letter-spacing: -0.02em; line-height: 1.15; margin: 0; }
+  p { margin: 0 0 1em; color: var(--body); }
+  hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
+
+  header { border-bottom: 1px solid var(--ink); }
+  .bar { display: flex; justify-content: space-between; align-items: baseline; padding: 20px 0; gap: 16px; flex-wrap: wrap; }
+  .mark { font-weight: 600; letter-spacing: 0.24em; font-size: 16px; }
+  .bar nav { display: flex; gap: 20px; font-size: 14px; }
+
+  section { padding: 68px 0; border-bottom: 1px solid var(--rule); }
+  .lede { padding: 84px 0 72px; }
+  .lede h1 { font-size: clamp(34px, 6.2vw, 58px); font-weight: 600; margin-bottom: 22px; }
+  .lede .sub { font-size: clamp(17px, 2.3vw, 21px); color: var(--body); max-width: 34em; margin-bottom: 34px; }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 20px; }
+
+  pre {
+    background: var(--ink); color: #f2f2ef; font-family: var(--mono);
+    font-size: 13px; line-height: 1.75; padding: 22px 24px; margin: 0;
+    overflow-x: auto; border-radius: 2px;
+  }
+  pre .c { color: #9a9a93; }
+  pre .y { color: #fff; font-weight: 600; }
+  code { font-family: var(--mono); font-size: 0.92em; }
+
+  h2 { font-size: clamp(23px, 3.4vw, 30px); font-weight: 600; margin-bottom: 14px; }
+  .note { color: var(--muted); font-size: 14.5px; margin-top: 14px; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  th, td { text-align: left; padding: 13px 10px 13px 0; border-bottom: 1px solid var(--rule); font-size: 15.5px; vertical-align: top; }
+  th { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; color: var(--muted); font-weight: 400; text-transform: uppercase; }
+  td.n { font-family: var(--mono); white-space: nowrap; }
+
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--rule); margin-top: 26px; }
+  .cols > div { padding: 24px 22px; }
+  .cols > div:first-child { border-right: 1px solid var(--rule); }
+  .cols h3 { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.12em; color: var(--muted); font-weight: 400; margin-bottom: 16px; text-transform: uppercase; }
+  .stat { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; font-size: 15px; }
+  .stat b { font-family: var(--mono); font-size: 19px; font-weight: 600; }
+  .dim { color: var(--faint); }
+
+  ul.plain { list-style: none; padding: 0; margin: 0; }
+  ul.plain li { padding: 15px 0; border-bottom: 1px solid var(--rule); font-size: 16px; }
+  ul.plain li:last-child { border-bottom: 0; }
+  ul.plain b { font-weight: 600; }
+  ul.plain span { display: block; color: var(--muted); font-size: 14.5px; margin-top: 3px; }
+
+  .big { font-family: var(--mono); font-size: clamp(42px, 8vw, 68px); font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+
+  footer { padding: 54px 0 72px; color: var(--muted); font-size: 14px; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 620px) {
+    .cols { grid-template-columns: 1fr; }
+    .cols > div:first-child { border-right: 0; border-bottom: 1px solid var(--rule); }
+    section { padding: 52px 0; }
+  }
